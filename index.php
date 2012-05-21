@@ -1,5 +1,5 @@
 <?php
-$conn = mysql_connect('localhost', 'snay2_delphi', 'M8mu.5t8^hG)');
+$conn = mysql_connect('localhost', 'redacted', 'redacted');
 mysql_select_db('snay2_delphi');
 
 $estimate_id = mysql_real_escape_string($_POST['estimate_id']);
