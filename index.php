@@ -11,7 +11,7 @@ if (isset($_POST['join_estimate'])) {
 } else if (isset($_POST['new_estimate'])) {
     // Create a new estimate
     $estimate_id = rand(1000, 9999);
-    echo "Your estimate ID is $estimate_id.<br />";
+    $info = "Your estimate ID is $estimate_id.<br />";
     createRound($estimate_id);
 } else if (isset($_POST['new_round'])) {
     // Create a new round
@@ -24,14 +24,10 @@ if (isset($_POST['join_estimate'])) {
     $high_unit = mysql_real_escape_string($_POST['high_bound_units']);
     $round = getCurrentRound($estimate_id);
     addEstimate($estimate_id, $round, $low, $low_unit, $high, $high_unit);
-    echo 'Your estimate has been submitted.';
+    $info = 'Your estimate has been submitted.';
 } else if (isset($_POST['show_results'])) {
     // Get the results for this estimate and show them
-    if ($_POST['other_round'] != '') {
-        $round = mysql_real_escape_string($_POST['other_round']);
-    } else {
-        $round = getCurrentRound($estimate_id);
-    }
+    $round = getCurrentRound($estimate_id);
     showResults($estimate_id, $round);
 }
 
@@ -51,7 +47,7 @@ function incrementRound($estimate_id) {
     $round = getCurrentRound($estimate_id) + 1;
     $query = "UPDATE rounds SET round='$round' WHERE estimate_id='$estimate_id';";
     mysql_query($query);
-    echo "Now on round $round.";
+    $info = "Now on round $round.";
 }
 
 /**
@@ -73,49 +69,67 @@ function addEstimate($estimate_id, $round, $low, $low_unit, $high, $high_unit) {
 }
 
 /**
- * Shows all the estimates for this round
+ * Shows all the estimates for this round and all preceding rounds
  */
 function showResults($estimate_id, $round) {
-    $query = "SELECT * FROM estimates WHERE estimate_id='$estimate_id' AND "
-        ."round='$round' ORDER BY low DESC;";
-    $result = mysql_query($query);
-    echo "<strong>Results for round $round:</strong><br />";
-    while ($row = mysql_fetch_assoc($result)) {
-        echo $row['low'].' '.$row['low_unit'].' -- '
-            .$row['high'].' '.$row['high_unit'].'<br />';
-    }
+    if ($round < 1) return;
+    echo '<h2>Results</h2>';
+    echo '<button type="submit" class="important" name="new_round">Start new round for this estimate</button>';
     echo '<hr />';
+    for ($i = 1; $i <= $round; $i++) {
+        $query = "SELECT * FROM estimates WHERE estimate_id='$estimate_id' AND "
+            ."round='$i' ORDER BY low DESC;";
+        $result = mysql_query($query);
+        echo "<strong>Round $i:</strong><br />";
+        while ($row = mysql_fetch_assoc($result)) {
+            echo $row['low'].' '.$row['low_unit'].' -- '
+                .$row['high'].' '.$row['high_unit'].'<br />';
+        }
+        echo '<hr />';
+    }
 }
 ?>
 <html>
 <head>
     <meta name="viewport" content="width=320,user-scalable=false" />
+    <link rel="stylesheet" href="main.css" />
+    <title>Delphi Estimation Facilitator</title>
 </head>
 <body>
-    <header><h1>Delphi estimation</h1></header>
+    <header><h2>Delphi Estimation</h2></header>
+<?php
+    if ($info) {
+        echo '<div class="info">'.$info.'</div>';
+    }
+?>
     <form action="index.php" method="POST">
-        <button name="new_estimate">Create new estimate</button><br />
+        <button class="important" name="new_estimate">Create new estimate session</button><br />
         <hr />
-        Estimate ID: <input type="tel" name="estimate_id" value="<?php echo $estimate_id; ?>" /><br />
-        Low bound: <input type="number" name="low_bound" />
+
+        <label for="estimate_id">Estimate ID:</label>
+        <input type="text" pattern="[0-9]*" class="num" name="estimate_id" id="estimate_id" value="<?php echo $estimate_id; ?>" /><br />
+
+        <label for="low_bound">Low bound:</label>
+        <input type="number" class="num" name="low_bound" id="low_bound"/>
         <select name="low_bound_units">
             <option value="h">H</option>
             <option value="d">D</option>
             <option value="w">W</option>
             <option value="m">M</option>
         </select><br />
-        High bound: <input type="number" name="high_bound" />
+
+        <label for="high_bound">High bound:</label>
+        <input type="number" class="num" name="high_bound" id="high_bound" />
         <select name="high_bound_units">
             <option value="h">H</option>
             <option value="d">D</option>
             <option value="w">W</option>
             <option value="m">M</option>
         </select><br />
-        <input type="submit" value="Submit estimate" name="submit_estimate" />
+
+        <button type="submit" name="submit_estimate">Submit my estimate</button>
         <hr />
-        <button name="new_round">New round on this estimate</button><br />
-        <button name="show_results">Show results for this round</button>
-        or a different round: <input name="other_round" />
+        <button name="show_results">Show all results</button>
     </form>
 </body>
 </html>

@@ -1,0 +1,43 @@
+body {
+    font-family: "Trebuchet MS", Verdana, Arial, sans-serif;
+    background-color: #DCEBDD;
+}
+
+input.num {
+    width: 15ex;
+}
+
+label {
+    width: 12ex;
+    display: inline-block;
+}
+
+button {
+    background: #304345;
+    width: 100%;
+    padding: 9px;
+    margin: 10px 0;
+    letter-spacing: 1px;
+    border: none;
+    color: white;
+    -webkit-border-radius: 6px;
+    -webkit-appearance: none;
+}
+
+button.important {
+    background: #A0D5D6;
+    color: black;
+}
+
+h2 {
+    margin: 0;
+}
+
+div.info {
+    border: 1px solid #304345;
+    padding: 9px;
+    margin-top: 5px;
+    background-color: #789AA1;
+    -webkit-border-radius: 6px;
+    box-shadow: 4px 4px 3px #888888;
+}
