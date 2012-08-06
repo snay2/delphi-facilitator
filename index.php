@@ -86,7 +86,9 @@ function addEstimate($estimate_id, $round, $low, $low_unit, $high, $high_unit) {
 function showResults($estimate_id, $round) {
     if ($round < 1) return;
 ?>
-    <h2>Results</h2>
+    <h2>Results
+        <span style="font-size: small"><a href="#" id="normalize" onclick="rotateNormalization();">Normalize (h)</a></span>
+    </h2>
     <button type="submit" class="important" name="new_round">Start new round for this estimate</button>
     <hr />
     <div id="results">Loading results...</div>

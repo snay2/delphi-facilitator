@@ -28,7 +28,6 @@ function displayResults(data, div) {
         div.append('<strong>Round ' + round.id + '</strong><br />');
         $.each(round.estimates, function() {
             estimate = this;
-            //estimate = normalize(estimate, 'd');
             div.append(estimate.low + ' ' + estimate.low_unit + ' -- '
                 + estimate.high + ' ' + estimate.high_unit + '<br />');
         });
@@ -36,3 +35,16 @@ function displayResults(data, div) {
     });
 }
 
+var units = ['h', 'd', 'w', 'm'];
+var normalization = 3;
+function rotateNormalization() {
+    normalization = (normalization + 1) % 4;
+    $.each(results.rounds, function() {
+        $.each(this.estimates, function() {
+            estimate = this;
+            estimate = normalize(estimate, units[normalization]);
+        });
+    });
+    $("#normalize").html("Normalize (" + units[(normalization + 1) % 4] + ")");
+    displayResults(results, $("div#results"));
+}
