@@ -4,7 +4,18 @@ mysql_select_db('snay2_delphi');
 
 $estimate_id = mysql_real_escape_string($_POST['estimate_id']);
 $is_admin = mysql_real_escape_string($_POST['is_admin']);
+?>
 
+<html>
+<head>
+    <meta name="viewport" content="width=320,user-scalable=false" />
+    <link rel="stylesheet" href="main.css" />
+    <title>Delphi Estimation Facilitator</title>
+</head>
+<body>
+    <form action="index.php" method="POST">
+
+<?php
 if (isset($_POST['join_estimate'])) {
     // Join this estimate and show the form
     $estimate_id = mysql_real_escape_string($_POST['join_id']);
@@ -89,20 +100,15 @@ function showResults($estimate_id, $round) {
     }
 }
 ?>
-<html>
-<head>
-    <meta name="viewport" content="width=320,user-scalable=false" />
-    <link rel="stylesheet" href="main.css" />
-    <title>Delphi Estimation Facilitator</title>
-</head>
-<body>
+
     <header><h2>Delphi Estimation</h2></header>
+
 <?php
     if ($info) {
         echo '<div class="info">'.$info.'</div>';
     }
 ?>
-    <form action="index.php" method="POST">
+
         <button class="important" name="new_estimate">Create new estimate session</button><br />
         <hr />
 
