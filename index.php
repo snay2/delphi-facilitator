@@ -1,6 +1,6 @@
 <?php
-$conn = mysql_connect('localhost', 'redacted', 'redacted');
-mysql_select_db('snay2_delphi');
+// Open the database connection
+require_once('db.php');
 
 $estimate_id = mysql_real_escape_string($_POST['estimate_id']);
 $is_admin = mysql_real_escape_string($_POST['is_admin']);
@@ -11,6 +11,7 @@ $is_admin = mysql_real_escape_string($_POST['is_admin']);
     <meta name="viewport" content="width=320,user-scalable=false" />
     <link rel="stylesheet" href="main.css" />
     <title>Delphi Estimation Facilitator</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 </head>
 <body>
     <form action="index.php" method="POST">
@@ -84,25 +85,28 @@ function addEstimate($estimate_id, $round, $low, $low_unit, $high, $high_unit) {
  */
 function showResults($estimate_id, $round) {
     if ($round < 1) return;
-    echo '<h2>Results</h2>';
-    echo '<button type="submit" class="important" name="new_round">Start new round for this estimate</button>';
-    echo '<hr />';
-    for ($i = 1; $i <= $round; $i++) {
-        $query = "SELECT * FROM estimates WHERE estimate_id='$estimate_id' AND "
-            ."round='$i' ORDER BY low DESC;";
-        $result = mysql_query($query);
-        echo "<strong>Round $i:</strong><br />";
-        while ($row = mysql_fetch_assoc($result)) {
-            // Truncate the decimals if zero
-            $row['low'] = (float)$row['low'];
-            $row['high'] = (float)$row['high'];
-
-            echo $row['low'].' '.$row['low_unit'].' -- '
-                .$row['high'].' '.$row['high_unit'].'<br />';
+?>
+    <h2>Results</h2>
+    <button type="submit" class="important" name="new_round">Start new round for this estimate</button>
+    <hr />
+    <div id="results">Loading results...</div>
+    <script type="text/javascript" src="./results.js"></script>
+    <script type="text/javascript">
+        results = {};
+        function gotResults(data) {
+            results = data;
+            displayResults(results, $("div#results"));
         }
-        echo '<hr />';
-    }
-}
+
+        $(document).ready(function() {
+            var script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.src = "./results.php?estimateID=<?php echo $estimate_id; ?>&round=<?php echo $round; ?>&callback=gotResults";
+            $("body").append(script);
+        });
+    </script>
+<?php
+} // showResults
 ?>
 
     <header><h2>Delphi Estimation</h2></header>
