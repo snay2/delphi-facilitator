@@ -17,3 +17,9 @@ Instructions for use
 6. If another round is merited, the moderator taps "Start a new round for this estimate."
 7. Everyone submits another estimate, exactly as before.
 8. The group repeats steps 4-7 until consensus is reached.
+
+Normalization
+-------------
+Normalization facilitates easy comparison of results with varied units.
+
+Next to the Results heading is a link: "Normalize (h)". Tapping this link normalizes all the results to the unit indicated in the parentheses. The link cycles through all four available units in order (hours, days, weeks, and months). 
