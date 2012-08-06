@@ -12,12 +12,12 @@ CREATE TABLE IF NOT EXISTS `estimates` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `estimate_id` int(11) NOT NULL,
   `round` int(11) NOT NULL,
-  `low` int(11) NOT NULL,
+  `low` decimal(9,1) NOT NULL,
   `low_unit` varchar(1) NOT NULL,
-  `high` int(11) NOT NULL,
+  `high` decimal(9,1) NOT NULL,
   `high_unit` varchar(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1240 ;
 
 -- --------------------------------------------------------
 
@@ -30,5 +30,5 @@ CREATE TABLE IF NOT EXISTS `rounds` (
   `round` int(11) NOT NULL DEFAULT '1',
   `id` int(11) NOT NULL AUTO_INCREMENT,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
 

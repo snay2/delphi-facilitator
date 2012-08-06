@@ -93,6 +93,10 @@ function showResults($estimate_id, $round) {
         $result = mysql_query($query);
         echo "<strong>Round $i:</strong><br />";
         while ($row = mysql_fetch_assoc($result)) {
+            // Truncate the decimals if zero
+            $row['low'] = (float)$row['low'];
+            $row['high'] = (float)$row['high'];
+
             echo $row['low'].' '.$row['low_unit'].' -- '
                 .$row['high'].' '.$row['high_unit'].'<br />';
         }
@@ -116,7 +120,7 @@ function showResults($estimate_id, $round) {
         <input type="text" pattern="[0-9]*" class="num" name="estimate_id" id="estimate_id" value="<?php echo $estimate_id; ?>" /><br />
 
         <label for="low_bound">Low bound:</label>
-        <input type="number" class="num" name="low_bound" id="low_bound"/>
+        <input type="number" step="0.1" pattern="\d+(\.\d*)?" class="num" name="low_bound" id="low_bound"/>
         <select name="low_bound_units">
             <option value="h">H</option>
             <option value="d">D</option>
@@ -125,7 +129,7 @@ function showResults($estimate_id, $round) {
         </select><br />
 
         <label for="high_bound">High bound:</label>
-        <input type="number" class="num" name="high_bound" id="high_bound" />
+        <input type="number" step="0.1" pattern="\d+(\.\d*)?" class="num" name="high_bound" id="high_bound" />
         <select name="high_bound_units">
             <option value="h">H</option>
             <option value="d">D</option>
