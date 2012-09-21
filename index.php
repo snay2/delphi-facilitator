@@ -97,7 +97,7 @@ function showResults($estimate_id, $round) {
         results = {};
         function gotResults(data) {
             results = data;
-            displayResults(results, $("div#results"));
+            prepResults(results, $("div#results"));
         }
 
         $(document).ready(function() {

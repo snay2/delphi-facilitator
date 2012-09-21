@@ -11,6 +11,12 @@ var conversion = {
     'm': {'h': 1/8/5/4, 'd': 1/5/4, 'w': 1/4, 'm': 1    }
 };
 
+// Entry point when data is retrieved. Only called once
+function prepResults(data, div) {
+    $.each(data.rounds, calcRange);
+    displayResults(data, div);
+}
+
 // Normalizes the estimate to specific units
 function normalize(estimate, unit) {
     estimate.low *= conversion[unit][estimate.low_unit];
@@ -28,8 +34,13 @@ function displayResults(data, div) {
         div.append('<strong>Round ' + round.id + '</strong><br />');
         $.each(round.estimates, function() {
             estimate = this;
-            div.append(estimate.low + ' ' + estimate.low_unit + ' -- '
-                + estimate.high + ' ' + estimate.high_unit + '<br />');
+            div.append('<div class="numbers">'
+                + estimate.low + ' ' + estimate.low_unit + ' -- '
+                + estimate.high + ' ' + estimate.high_unit
+                + '<div class="bar"><span class="bar1" style="width:'
+                + estimate.low_percent + '%;">&nbsp;</span>'
+                + '<span class="bar2" style="left:' + estimate.low_percent
+                + '%;width:' + estimate.high_percent + '%;">&nbsp;</span></div>');
         });
         div.append('<hr />');
     });
@@ -47,4 +58,30 @@ function rotateNormalization() {
     });
     $("#normalize").html("Normalize (" + units[(normalization + 1) % 4] + ")");
     displayResults(results, $("div#results"));
+}
+
+function calcRange() {
+    var low = 999; // magic number for infinity
+    var high = 0;
+    round = this;
+    // Find min
+    $.each(round.estimates, function() {
+        var thislow = this.low * conversion['d'][this.low_unit];
+        if (thislow < low) low = thislow;
+    });
+    // Find max
+    $.each(round.estimates, function() {
+        var thishigh = this.high * conversion['d'][this.high_unit];
+        if (thishigh > high) high = thishigh;
+    });
+    // Calculate percentages
+    $.each(round.estimates, function() {
+        estimate = this;
+        var thislow = this.low * conversion['d'][this.low_unit];
+        var thishigh = this.high * conversion['d'][this.high_unit];
+        var templow = thislow - low;
+        var temphigh = thishigh;
+        estimate.low_percent = templow / high * 100;
+        estimate.high_percent = temphigh / high * 100 - estimate.low_percent;
+    });
 }

@@ -41,3 +41,22 @@ div.info {
     -webkit-border-radius: 6px;
     box-shadow: 4px 4px 3px #888888;
 }
+
+/* Comparison bar styles */
+div#results div.numbers {
+    display: block;
+    clear: both;
+}
+div.bar {
+    float: right;
+    height: 1em;
+    width: 150px;
+    background-color: #A0D5D6;
+}
+div.bar span {
+    height: 1em;
+    float: left;
+}
+span.bar2 {
+    background-color: #304345;
+}
