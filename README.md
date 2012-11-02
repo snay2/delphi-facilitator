@@ -23,3 +23,10 @@ Normalization
 Normalization facilitates easy comparison of results with varied units.
 
 Next to the Results heading is a link: "Normalize (h)". Tapping this link normalizes all the results to the unit indicated in the parentheses. The link cycles through all four available units in order (hours, days, weeks, and months). 
+
+Installation
+------------
+If you want to run delphi-facilitator on your own server, you just need Apache, PHP, and MySQL. Install and configure
+those. (On Ubuntu that's as simple as `apt-get install apache2 php5 mysql-server`.) Create a MySQL database called
+`snay2_delphi` with the schema described in `snay2_delphi.sql`. Modify `db.php` to point to the MySQL server with the 
+proper credentials. That's it.
